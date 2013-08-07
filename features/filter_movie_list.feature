@@ -23,13 +23,32 @@ Background: movies have been added to database
   
 Scenario: restrict to movies with 'PG' or 'R' ratings
   # enter step(s) to check the 'PG' and 'R' checkboxes
+  Given I check the following ratings: PG, R
   # enter step(s) to uncheck all other checkboxes
+  Given I uncheck the following ratings: G, PG-13, NC-17
   # enter step to "submit" the search form on the homepage
-  # enter step(s) to ensure that PG and R movies are visible
+  When I press "Refresh"
+  # enter step(s) to ensure that PG and R movies are visible  
+  Then I should see the following movies:
+  | The Terminator           |
+  | When Harry Met Sally     |
+  | Amelie                   |
+  | The Incredibles          |
+  | Raiders of the Lost Ark  |
   # enter step(s) to ensure that other movies are not visible
+  Then I should not see the following movies:
+  | Aladdin                 | G      | 25-Nov-1992  |
+  | The Help                | PG-13  | 10-Aug-2011  |
+  | Chocolat                | PG-13  | 5-Jan-2001   |
+  | 2001: A Space Odyssey   | G      | 6-Apr-1968   |
+  | Chicken Run             | G      | 21-Jun-2000  |  
 
 Scenario: no ratings selected
-  # see assignment
+  Given I uncheck the following ratings: G, PG, PG-13, NC-17, R 
+  When I press "Refresh"
+  Then I should see all of the movies
 
 Scenario: all ratings selected
-  # see assignment
+  Given I check the following ratings: G, PG, PG-13, NC-17, R 
+  When I press "Refresh"
+  Then I should see all of the movies
